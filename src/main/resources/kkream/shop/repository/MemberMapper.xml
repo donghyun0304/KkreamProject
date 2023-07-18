@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kkream.shop.repository.MemberMapper">
+
+    <select id="findById" resultType="Member">
+        select member_id, email, password, phone_number, shoe_size,
+               ad_message, ad_email, profile_file, nick_name, name, introduction,
+               grade, member_date, deleted_status
+        from member
+        where member_id = #{memberId}
+    </select>
+
+    <select id="findByEmail" resultType="Member">
+        select member_id, email, password, phone_number, shoe_size,
+               ad_message, ad_email, profile_file, nick_name, name, introduction,
+               grade, member_date, deleted_status
+        from member
+        where email = #{email}
+    </select>
+
+    <select id="findAll" resultType="Member">
+        select member_id, email, password, phone_number, shoe_size,
+               ad_message, ad_email, profile_file, nick_name, name, introduction,
+               grade, member_date, deleted_status
+        from member
+    </select>
+
+    <insert id="save">
+        <selectKey keyProperty="memberId" resultType="Long" order="BEFORE">
+            select seq_member_id.nextval
+            from dual
+        </selectKey>
+        insert into member(member_id, email, password, phone_number, shoe_size,
+                           ad_message, ad_email, nick_name, name, grade, member_date, deleted_status)
+                    values(#{memberId}, #{email}, #{password}, #{phoneNumber}, #{shoeSize},
+                           #{adMessage}, #{adEmail}, #{nickName}, #{name}, #{grade}, sysdate, 'N')
+    </insert>
+
+    <update id="update">
+        update member
+        set
+        password = #{updateDto.password},
+        phone_number = #{updateDto.phoneNumber},
+        shoe_size = #{updateDto.shoeSize},
+        ad_message = #{updateDto.adMessage},
+        ad_email = #{updateDto.adEmail},
+        profile_file = #{updateDto.profileFile},
+        nick_name = #{updateDto.nickName},
+        introduction = #{updateDto.introduction},
+        grade = #{updateDto.grade}
+        where member_id = #{memberId}
+    </update>
+
+    <update id="delete">
+        update member
+        set deleted_status = 'Y'
+        where member_id = #{memberId}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kkream.shop.repository.ProductMapper">
+
+    <select id="findById" resultType="Product">
+        select product_id, brand_id, category_id, product_name,
+               model_number, release_date, product_color, product_release_price, deleted_status
+        from product
+        where product_id = #{productId}
+    </select>
+
+    <select id="findByIdForProductView" resultType="Product">
+        select product_id, product_name, model_number, release_date,
+               product_color, product_release_price , brand_name, price as sizePrice
+        from (
+            select a.product_id, a.product_name, a.model_number, a.release_date,
+                   a.product_color, a.product_release_price, b.brand_name, e.price,
+                   row_number() over (partition by a.product_id order by e.price asc) rn
+            from product a
+            inner join brand b
+                on a.brand_id = b.brand_id
+            inner join product_size_price e
+                on a.product_id = e.product_id
+        )
+        where rn = 1 and product_id = #{productId}
+    </select>
+
+    <select id="findAll" resultType="Product">
+        select product_id, brand_id, category_id, product_name,
+               model_number, release_date, product_color, product_release_price, deleted_status
+        from product
+    </select>
+
+<!-- 상품별 사이즈와 관계없이 최저가 상품만 조회  -->
+    <select id="findAllWithBrandNameAndLowestPrice" resultType="Product">
+        select product_id, product_name, brand_name, price as sizePrice
+        from (
+        select a.product_id, a.product_name, b.brand_name, e.price,
+               row_number() over (partition by a.product_id order by e.price asc) rn
+        from product a
+        left join brand b
+            on a.brand_id = b.brand_id
+        left join product_size_price e
+            on a.product_id = e.product_id
+        )
+        where rn = 1
+    </select>
+
+    <insert id="save">
+        <selectKey keyProperty="productId" resultType="Long" order="BEFORE">
+            select seq_product_id.nextval
+            from dual
+        </selectKey>
+        insert into product(product_id, product_size_id, brand_id, category_id,
+                            product_name, model_number, release_date, product_color,
+                            product_release_price, deleted_status)
+                    values(#{productId}, #{productSizeId}, #{brandId}, #{categoryId},
+                            #{productName}, #{modelNumber}, #{releaseDate}, #{productColor},
+                            #{productReleasePrice}, 'N')
+    </insert>
+
+    <update id="update">
+        update product
+        set
+        brand_id = #{updateParam.brandId},
+        category_id = #{updateParam.categoryId},
+        product_name = #{updateParam.productName},
+        model_number = #{updateParam.modelNumber},
+        release_date = #{updateParam.releaseDate},
+        product_color = #{updateParam.productColor},
+        product_release_price = #{updateParam.productReleasePrice}
+        where product_id = #{productId}
+    </update>
+
+    <update id="delete">
+        update product
+        set deleted_status = 'Y'
+        where product_id = #{productId}
+    </update>
+
+
+</mapper>

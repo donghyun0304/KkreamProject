@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kkream.shop.repository.BrandMapper">
+
+    <select id="findById" resultType="Brand">
+        select brand_id, brand_name
+        from brand
+        where brand_id = #{brandId}
+    </select>
+
+    <select id="findByBrandName" resultType="Brand">
+        select brand_id, brand_name
+        from brand
+        where brand_name = #{brandName}
+    </select>
+
+    <insert id="save">
+        <selectKey keyProperty="brandId" resultType="Long" order="BEFORE">
+            select seq_brand_id.nextval
+            from dual
+        </selectKey>
+        insert into brand(brand_id, brand_name)
+        values (#{brandId}, #{brandName})
+    </insert>
+
+
+
+
+
+
+
+</mapper>

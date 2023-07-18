@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kkream.shop.repository.ProductImageFileMapper">
+
+    <select id="findById" resultType="ProductImageFile">
+        select file_number, product_id upload_file_name,
+               store_file_name, created_Date, deleted_Status
+        from product_image_file
+        where file_number = #{fileNumber}
+    </select>
+
+    <select id="findAllByProductId" resultType="ProductImageFile">
+        select file_number, product_id, upload_file_name,
+               store_file_name, created_Date, deleted_Status
+        from product_image_file
+        where product_id = #{productId}
+    </select>
+
+    <insert id="save">
+        <selectKey keyProperty="fileNumber" resultType="Long" order="BEFORE">
+            select seq_product_image_file_id.nextval
+            from dual
+        </selectKey>
+        insert into product_image_file(file_number, product_id,
+                                       upload_file_name, store_file_name,
+                                       created_date, deleted_status)
+        values(#{fileNumber}, #{productId}, #{uploadFileName}, #{storeFileName}, sysdate, 'N')
+    </insert>
+
+
+
+
+
+
+
+</mapper>

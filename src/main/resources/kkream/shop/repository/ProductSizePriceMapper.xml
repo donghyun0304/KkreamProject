@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kkream.shop.repository.ProductSizePriceMapper">
+
+    <select id="findById" resultType="ProductSizePrice">
+        select product_size_price_id, product_size_id, price, product_id
+        from product_size_price
+        where product_size_price_id = #{productSizePriceId}
+    </select>
+
+    <insert id="save">
+        <selectKey keyProperty="productSizePriceId" resultType="Long" order="BEFORE">
+            select seq_product_size_price_id.nextval
+            from dual
+        </selectKey>
+        insert into product_size_price(product_size_price_id, product_size_id, price, product_id)
+        values(#{productSizePriceId}, #{productSizeId}, #{price}, #{productId})
+    </insert>
+
+
+
+
+
+
+
+</mapper>
