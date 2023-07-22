@@ -15,11 +15,11 @@
 </head>
 <body>
 
-<div th:replace="~{/headerNavbar :: headerNavbar}"></div>
-
-<!--  content start-->
 
 <div class="container text-center" >
+    <div th:replace="~{/headerNavbar :: headerNavbar}"></div>
+
+    <!--  content start-->
     <div class="row">
 
         <div th:each="homeResponseDto : ${homeResponseDtos}" class="card col-6 col-md-3">
@@ -39,7 +39,6 @@
     <hr>
 
     <!--  content finish-->
-
     <div th:replace="~{/footer :: footerFragment}"></div>
 </div>
 

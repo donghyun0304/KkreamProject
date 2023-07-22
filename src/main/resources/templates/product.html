@@ -15,11 +15,14 @@
 </head>
 <body>
 
-<div th:replace="~{/headerNavbar :: headerNavbar}"></div>
 
-<!--  content start-->
+
+
 
 <div class="container text-center">
+    <div th:replace="~{/headerNavbar :: headerNavbar}"></div>
+
+    <!--  content start-->
     <div class="row">
         <div class="card col-6">
             <img th:src="|../images/${product.imageFiles[0].uploadFileName}|"
@@ -90,11 +93,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
         </div>
 
     </div>
