@@ -22,7 +22,7 @@ public class ProductController {
     public String product(@PathVariable Long productId, Model model){
         ProductResponseDto product = productService.findByIdForProductView(productId);
         model.addAttribute("product", product);
-        return "product";
+        return "product/product";
     }
 
 
