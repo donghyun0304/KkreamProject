@@ -14,6 +14,7 @@ public class LoginService {
     public Member login(String email, String password) {
         return memberRepository.findByEmail(email)
                 .filter(m -> m.getPassword().equals(password))
-                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호 확인"));
+                .orElse(null);  //예외 터트리지 않고 loginController에서 validation 처리
+//                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호 확인"));
     }
 }
