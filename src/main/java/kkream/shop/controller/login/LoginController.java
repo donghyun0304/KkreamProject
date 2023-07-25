@@ -15,18 +15,17 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/login")
 @Slf4j
 public class LoginController {
 
     private final LoginService loginService;
 
-    @GetMapping
+    @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginDto") LoginRequestDto loginRequestDto){
         return "login/login";
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public String login(@Validated @ModelAttribute("loginDto") LoginRequestDto loginRequestDto, BindingResult bindingResult,
                         @RequestParam(defaultValue = "/") String redirectURL,
                         HttpServletRequest request){
@@ -50,6 +49,15 @@ public class LoginController {
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
         return "redirect:" + redirectURL;
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 
 
